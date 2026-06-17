@@ -1,17 +1,25 @@
 # Identity Services Engine (ISE) & Zero-Trust NAC
 
-Design and operation of Cisco Identity Services Engine for 802.1X / MAB network
-access control and Zero-Trust segmentation across wired and wireless.
+Designing and operating Cisco Identity Services Engine as the policy core of a
+Zero-Trust network — every user and device is continuously identified, profiled,
+and authorized before it touches the network, wired or wireless.
 
-## Focus
-- Authentication / authorization policy sets, profiling, posture, and TACACS+ device admin
-- 802.1X (EAP-TLS) and MAB onboarding against Active Directory and an internal CA
-- Integration with Catalyst 9800 wireless and Catalyst switching as RADIUS NADs
-- Certificate lifecycle and high-availability deployment
+## What I work on
+- **Policy architecture** — authentication and authorization policy sets, downloadable
+  ACLs and dynamic VLAN assignment, device profiling and posture.
+- **802.1X / EAP-TLS** — certificate-based onboarding for managed endpoints against
+  Active Directory and an internal CA, with MAB fallback for headless devices.
+- **TACACS+ device administration** — role-based command authorization for the
+  network estate (ISE is the one NAC platform that also does TACACS+).
+- **Wireless + wired NADs** — Catalyst 9800 WLCs and Catalyst switches as RADIUS
+  clients, including CoA / change-of-authorization.
+- **Lifecycle** — certificate management, AD/LDAP integration, and HA deployment;
+  ISE 3.4 (PAC-less TrustSec).
 
 ## Reference build
 [`ise-demo-enclave`](https://github.com/labaccessnow/ise-demo-enclave) — a self-contained,
-fully automated Cisco ISE 3.4 + Windows Server AD lab on Proxmox: one Ansible role provisions
-both nodes, the DC promotes unattended, and ISE setup is driven over serial. Every gotcha is documented.
+fully automated **Cisco ISE 3.4 + Windows Server AD** lab on Proxmox. One Ansible role
+provisions both nodes, the domain controller promotes unattended (forest + DNS +
+authoritative NTP), and the ISE setup wizard is driven over serial. Every gotcha documented.
 
-Part of ongoing Zero-Trust work for enterprise and federal networks.
+Lead engineer for a production Cisco ISE / Zero-Trust deployment across enterprise and federal networks.
