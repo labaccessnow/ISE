@@ -4,6 +4,21 @@ ISE is the policy decision point in a Zero-Trust network: discover, profile, aut
 and authorize every endpoint — and revoke access the instant a session goes bad. I've run it
 as the access-control core for enterprise and federal networks, wired and wireless.
 
+## What's in this repo
+Runnable examples — the NAD side, the ISE side, and the automation that ties them together:
+
+| File | What it shows |
+|---|---|
+| [`examples/nad-802.1x-ibns2.cfg`](examples/nad-802.1x-ibns2.cfg) | IOS-XE switch NAD — **IBNS 2.0** 802.1X + MAB with CoA |
+| [`examples/wlc-9800-radius.cfg`](examples/wlc-9800-radius.cfg) | Catalyst **9800 WLC** — wireless 802.1X to ISE, AAA-override + CoA |
+| [`examples/tacacs-device-admin.cfg`](examples/tacacs-device-admin.cfg) | **TACACS+** device administration — per-command authz, with a break-glass fallback |
+| [`examples/downloadable-acl.md`](examples/downloadable-acl.md) | **Downloadable ACL** authorization + a Monitor→Closed rollout that won't lock users out |
+| [`examples/ers-add-network-device.py`](examples/ers-add-network-device.py) | Register a NAD via the **ERS API** (idempotent, secrets from env) |
+| [`playbooks/ise_network_device.yml`](playbooks/ise_network_device.yml) | The same, declarative — NADs as desired state via the **cisco.ise** collection |
+
+> Placeholders throughout; shared secrets and ERS creds come from the environment — nothing
+> sensitive is committed.
+
 ## What it looks like in practice
 
 The switch (the NAD) does the enforcement; ISE makes the decision. Here's the IOS-XE side

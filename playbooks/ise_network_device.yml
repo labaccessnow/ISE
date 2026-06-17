@@ -1,0 +1,40 @@
+---
+# The same NAD registration as the ERS script, but declarative — the cisco.ise collection
+# wraps the ERS API so a network device is just desired state. Re-running converges; it
+# doesn't duplicate.
+#
+#   ansible-galaxy collection install cisco.ise
+#   pip install ciscoisesdk
+#   ansible-playbook playbooks/ise_network_device.yml
+#
+# Creds come from the environment / a vault — never inline.
+- name: Register network access devices in ISE
+  hosts: localhost
+  gather_facts: false
+  vars:
+    ise_login: &ise_login
+      ise_hostname: "{{ lookup('env', 'ISE_HOST') }}"
+      ise_username: "{{ lookup('env', 'ISE_ERS_USER') }}"
+      ise_password: "{{ lookup('env', 'ISE_ERS_PASS') }}"
+      ise_verify: false        # lab self-signed cert; true + a CA bundle in production
+    nads:
+      - { name: sw-access-01, ip: 0.0.0.0 }
+      - { name: sw-access-02, ip: 0.0.0.0 }
+      - { name: wlc-9800,     ip: 0.0.0.0 }
+  tasks:
+    - name: Ensure each NAD exists
+      cisco.ise.network_device:
+        <<: *ise_login
+        state: present
+        name: "{{ item.name }}"
+        NetworkDeviceIPList:
+          - ipaddress: "{{ item.ip }}"
+            mask: 32
+        authenticationSettings:
+          radiusSharedSecret: "{{ lookup('env', 'NAD_SECRET') }}"
+        NetworkDeviceGroupList:
+          - "Device Type#All Device Types"
+          - "Location#All Locations"
+      loop: "{{ nads }}"
+      loop_control:
+        label: "{{ item.name }}"
